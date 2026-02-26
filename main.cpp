@@ -27,7 +27,7 @@ std::vector<std::uint8_t> read_file_bytes(const std::string& path) {
 
 uint64_t get_e_entry(vector<uint8_t> bytes){
     // Skip to e_entry as per spec
-    int pointer = 24;
+    int pointer = 0x18;
     uint64_t e_entry = 0;
 
     // Read 8 Byte entry point
@@ -38,6 +38,33 @@ uint64_t get_e_entry(vector<uint8_t> bytes){
 
     return e_entry;
 }
+
+bool is_little_endian(vector<uint8_t> bytes){
+    // Skip to endian entry as per spec
+    int pointer = 0x05;
+
+    // Read 8 Byte entry point
+    uint8_t endianess = bytes[pointer];
+
+    return endianess == 1 ? true : false;
+}
+
+ProgramHeader get_program_headers(vector<uint8_t> bytes){
+    ProgramHeader p;
+
+    return p; 
+}
+
+struct ProgramHeader{
+    uint32_t p_type;
+    uint32_t p_flags;
+    uint64_t p_offset;
+    uint64_t p_vaddr;
+    uint64_t p_paddr;
+    uint64_t p_filesz;
+    uint64_t p_align;
+};
+
 uint64_t get_e_phoff(vector<uint8_t> bytes){
     // Skip to e_entry as per spec
     long pointer = 0x20;
@@ -51,13 +78,21 @@ uint64_t get_e_phoff(vector<uint8_t> bytes){
 
     return e_phoff;
 }
+
 vector<uint8_t> RAM;
+
 int main(){
 
-    auto bytes = read_file_bytes("./doom-riscv.elf");
-    int64_t e_entry = get_e_entry(bytes);
-    std::cout << e_entry <<'\n';
-    int64_t e_phoff = get_e_phoff(bytes);
-    cout <<  e_phoff << '\n';
+    auto bytes = read_file_bytes("./hello_world.elf");
+    uint64_t e_entry = get_e_entry(bytes);
+    uint64_t e_phoff = get_e_phoff(bytes);
+
+    bool little_endian = is_little_endian(bytes);
+
+    std::cout << e_entry << '\n';
+    std::cout << e_phoff << '\n';
+    std::cout << little_endian << '\n';
+    std::cout << bytes.size() << '\n';
+
     return 0;
 }
