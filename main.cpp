@@ -25,7 +25,7 @@ std::vector<std::uint8_t> read_file_bytes(const std::string& path) {
     return data;
 }
 
-uint64_t get_e_entry(vector<uint8_t> bytes){
+uint64_t get_e_entry(const std::vector<uint8_t>& bytes){
     // Skip to e_entry as per spec
     int pointer = 0x18;
     uint64_t e_entry = 0;
@@ -39,7 +39,7 @@ uint64_t get_e_entry(vector<uint8_t> bytes){
     return e_entry;
 }
 
-bool is_little_endian(vector<uint8_t> bytes){
+bool is_little_endian(const std::vector<uint8_t>& bytes){
     // Skip to endian entry as per spec
     int pointer = 0x05;
 
@@ -48,6 +48,7 @@ bool is_little_endian(vector<uint8_t> bytes){
 
     return endianess == 1 ? true : false;
 }
+
 struct ProgramHeader{
     uint32_t p_type;
     uint32_t p_flags;
@@ -58,8 +59,9 @@ struct ProgramHeader{
     uint64_t p_memsz;
     uint64_t p_align;
 };
-uint64_t get_64_by_offset(int pointer, vector<uint8_t> bytes){
-    uint64_t number =0;
+
+uint64_t get_64_by_offset(int pointer, const std::vector<uint8_t>& bytes){
+    uint64_t number = 0;
 
     // Read 8 Byte entry point
     for(int i = 0; i < 8; i++){
@@ -69,8 +71,9 @@ uint64_t get_64_by_offset(int pointer, vector<uint8_t> bytes){
    
     return number;
 }
-uint32_t get_32_by_offset(int pointer, vector<uint8_t> bytes){
-    uint32_t number =0;
+
+uint32_t get_32_by_offset(int pointer, const std::vector<uint8_t>& bytes){
+    uint32_t number = 0;
 
     // Read 8 Byte entry point
     for(int i = 0; i < 4; i++){
@@ -80,8 +83,10 @@ uint32_t get_32_by_offset(int pointer, vector<uint8_t> bytes){
     
     return number;
 }
-ProgramHeader get_program_headers(vector<uint8_t> bytes, uint64_t e_phoff){
+
+ProgramHeader get_program_headers(const std::vector<uint8_t>& bytes, uint64_t e_phoff){
     ProgramHeader p;
+
     p.p_type = get_32_by_offset(0x00+e_phoff,bytes);
     p.p_flags = get_32_by_offset(0x04+e_phoff,bytes);
     p.p_offset = get_64_by_offset(0x08+e_phoff,bytes);
@@ -96,7 +101,7 @@ ProgramHeader get_program_headers(vector<uint8_t> bytes, uint64_t e_phoff){
 
 
 
-uint64_t get_e_phoff(vector<uint8_t> bytes){
+uint64_t get_e_phoff(const std::vector<uint8_t>& bytes){
     // Skip to e_entry as per spec
     long pointer = 0x20;
     uint64_t e_phoff = 0;
@@ -112,20 +117,25 @@ uint64_t get_e_phoff(vector<uint8_t> bytes){
 
 vector<uint8_t> RAM;
 
+void log(string msg) {
+    cout << msg << '\n';
+}
+
 int main(){
 
-    auto bytes = read_file_bytes("./hello_world.elf");
+    const auto bytes = read_file_bytes("./hello_world.elf");
     uint64_t e_entry = get_e_entry(bytes);
     uint64_t e_phoff = get_e_phoff(bytes);
-
     bool little_endian = is_little_endian(bytes);
-
-    std::cout << e_entry << '\n';
-    std::cout << e_phoff << '\n';
-    std::cout << little_endian << '\n';
-    std::cout << bytes.size() << '\n';
     ProgramHeader p = get_program_headers(bytes,e_phoff);
-    cout << p.p_offset << '\n';
-    cout << p.p_type << '\n';
+
+    log("Address: " + to_string(p.p_vaddr));
+    log("MemSize: " + to_string(p.p_memsz));
+    log("FileSize: " + to_string(p.p_filesz));
+    log("Flag: " + to_string(p.p_flags));
+    log("Offset: " + to_string(p.p_offset));
+    log("Align: " + to_string(p.p_align));
+
     return 0;
 }
+
