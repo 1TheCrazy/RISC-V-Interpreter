@@ -32,18 +32,32 @@ uint64_t get_e_entry(vector<uint8_t> bytes){
 
     // Read 8 Byte entry point
     for(int i = 0; i < 8; i++){
-        e_entry |= bytes[pointer] << i * 8;
+        e_entry |= uint64_t(bytes[pointer]) << i * 8;
         pointer++;    
     }
 
     return e_entry;
 }
+uint64_t get_e_phoff(vector<uint8_t> bytes){
+    // Skip to e_entry as per spec
+    long pointer = 0x20;
+    uint64_t e_phoff = 0;
 
+    // Read 8 Byte entry point
+    for(int i = 0; i < 8; i++){
+        e_phoff |= uint64_t(bytes[pointer]) << i * 8;
+        pointer++;    
+    }
+
+    return e_phoff;
+}
+vector<uint8_t> RAM;
 int main(){
 
     auto bytes = read_file_bytes("./doom-riscv.elf");
     int64_t e_entry = get_e_entry(bytes);
-    std::cout << e_entry;
-
+    std::cout << e_entry <<'\n';
+    int64_t e_phoff = get_e_phoff(bytes);
+    cout <<  e_phoff << '\n';
     return 0;
 }
