@@ -48,13 +48,6 @@ bool is_little_endian(vector<uint8_t> bytes){
 
     return endianess == 1 ? true : false;
 }
-
-ProgramHeader get_program_headers(vector<uint8_t> bytes){
-    ProgramHeader p;
-
-    return p; 
-}
-
 struct ProgramHeader{
     uint32_t p_type;
     uint32_t p_flags;
@@ -62,8 +55,46 @@ struct ProgramHeader{
     uint64_t p_vaddr;
     uint64_t p_paddr;
     uint64_t p_filesz;
+    uint64_t p_memsz;
     uint64_t p_align;
 };
+uint64_t get_64_by_offset(int pointer, vector<uint8_t> bytes){
+    uint64_t number =0;
+
+    // Read 8 Byte entry point
+    for(int i = 0; i < 8; i++){
+        number |= uint64_t(bytes[pointer]) << i * 8;
+        pointer++;    
+    }
+   
+    return number;
+}
+uint32_t get_32_by_offset(int pointer, vector<uint8_t> bytes){
+    uint32_t number =0;
+
+    // Read 8 Byte entry point
+    for(int i = 0; i < 4; i++){
+        number |= uint32_t(bytes[pointer]) << i * 8;
+        pointer++;    
+    }
+    
+    return number;
+}
+ProgramHeader get_program_headers(vector<uint8_t> bytes, uint64_t e_phoff){
+    ProgramHeader p;
+    p.p_type = get_32_by_offset(0x00+e_phoff,bytes);
+    p.p_flags = get_32_by_offset(0x04+e_phoff,bytes);
+    p.p_offset = get_64_by_offset(0x08+e_phoff,bytes);
+    p.p_vaddr = get_64_by_offset(0x10+e_phoff,bytes);
+    p.p_paddr = get_64_by_offset(0x18+e_phoff,bytes);
+    p.p_filesz = get_64_by_offset(0x20+e_phoff,bytes);
+    p.p_memsz = get_64_by_offset(0x28+e_phoff,bytes);
+    p.p_align = get_64_by_offset(0x30+e_phoff,bytes);
+
+    return p; 
+}
+
+
 
 uint64_t get_e_phoff(vector<uint8_t> bytes){
     // Skip to e_entry as per spec
@@ -93,6 +124,8 @@ int main(){
     std::cout << e_phoff << '\n';
     std::cout << little_endian << '\n';
     std::cout << bytes.size() << '\n';
-
+    ProgramHeader p = get_program_headers(bytes,e_phoff);
+    cout << p.p_offset << '\n';
+    cout << p.p_type << '\n';
     return 0;
 }
