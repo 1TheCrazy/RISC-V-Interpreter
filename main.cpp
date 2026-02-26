@@ -25,22 +25,25 @@ std::vector<std::uint8_t> read_file_bytes(const std::string& path) {
     return data;
 }
 
+uint64_t get_e_entry(vector<uint8_t> bytes){
+    // Skip to e_entry as per spec
+    int pointer = 24;
+    uint64_t e_entry = 0;
+
+    // Read 8 Byte entry point
+    for(int i = 0; i < 8; i++){
+        e_entry |= bytes[pointer] << i * 8;
+        pointer++;    
+    }
+
+    return e_entry;
+}
+
 int main(){
-    try {
-        auto bytes = read_file_bytes("./doom-riscv.elf");
 
-        // print bytes (hex)
-        for (std::size_t i = 0; i < bytes.size(); ++i) {
-            std::cout << std::hex
-                      << std::setw(2)
-                      << std::setfill('0')
-                      << static_cast<int>(bytes[i])
-                      << ' ';
-        }
+    auto bytes = read_file_bytes("./doom-riscv.elf");
+    int64_t e_entry = get_e_entry(bytes);
+    std::cout << e_entry;
 
-        std::cout << std::endl;
-    }
-    catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
-    }
+    return 0;
 }
