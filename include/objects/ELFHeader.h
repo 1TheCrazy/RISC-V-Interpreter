@@ -1,5 +1,7 @@
 #include <cstdint>
 
+#pragma once
+
 struct ELFHeader{
     bool is_64;
     bool is_little_endian;

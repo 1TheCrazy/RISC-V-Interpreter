@@ -1,6 +1,9 @@
 #include <objects/Program.h>
 #include <objects/Instructions.h>
+#include <objects/InstructionType.h>
 #include <vector>
+#include <iostream>
+#include <util/InstructionUtil.h>
 
 Program::Program(const ELF& elf, const std::vector<uint8_t>& bytes){
     for(int i = 0; i < elf.program_headers.size(); i++){
@@ -28,8 +31,16 @@ void Program::step(){
     execute_instruction(instr, instruction); 
 }
 
-Instrcution Program::get_instruction_from_32(const uint32_t&){
-    // Find out wtf this is
+Instrcution Program::get_instruction_from_32(const uint32_t& inst){
+    auto opcode = inst & 0b1111111;
+    auto func_3 = (inst >> 11) & 0b111;
+    auto func7 = inst >> 24;
+
+    InstructionGroup instr_group = static_cast<InstructionGroup>(opcode);
+    InstructionType instr_type = instruction_group_to_type(instr_group);
+    Instrcution instruction = get_instruction(instr_type, inst);
+
+    // Process that instruction here
 }
 
 void Program::execute_instruction(Instrcution instruction, const uint32_t& data){

@@ -2,6 +2,8 @@
 #include <objects/ELF.h>
 #include <objects/Instructions.h>
 
+#pragma once
+
 class Program{
     public:
         // Fixed size array for now

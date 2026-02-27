@@ -1,5 +1,7 @@
 #include <cstdint>
 
+#pragma once
+
 struct ProgramHeader{
     uint32_t p_type;
     uint32_t p_flags;

@@ -4,6 +4,8 @@
 
 using namespace std;
 
+#pragma once
+
 class ELF{
     public:
         vector<ProgramHeader> program_headers;
