@@ -32,15 +32,13 @@ void Program::step(){
 }
 
 Instruction Program::get_instruction_from_32(const uint32_t& inst){
-    auto opcode = inst & 0b1111111;
-    auto func_3 = (inst >> 11) & 0b111;
-    auto func7 = inst >> 24;
+    auto opcode = op_code_of(inst);
 
     InstructionGroup instr_group = static_cast<InstructionGroup>(opcode);
     InstructionType instr_type = instruction_group_to_type(instr_group);
     Instruction instruction = get_instruction(instr_type, inst);
 
-    execute_instruction(instruction, inst);
+    return instruction;
 }
 
 void Program::execute_instruction(Instruction instruction, const uint32_t& data){
