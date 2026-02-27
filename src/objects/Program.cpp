@@ -40,11 +40,11 @@ Instruction Program::get_instruction_from_32(const uint32_t& inst){
     InstructionType instr_type = instruction_group_to_type(instr_group);
     Instruction instruction = get_instruction(instr_type, inst);
 
-    // Process that instruction here
+    execute_instruction(instruction, inst);
 }
 
 void Program::execute_instruction(Instruction instruction, const uint32_t& data){
     switch(instruction){
-        // Add cases here
+        
     }
 }
