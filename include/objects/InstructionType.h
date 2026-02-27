@@ -1,6 +1,6 @@
 #pragma once
 
-enum InstructionType{
+enum class InstructionType{
     R,
     I,
     S,
@@ -9,7 +9,7 @@ enum InstructionType{
     J
 };
 
-enum InstructionGroup{
+enum class InstructionGroup{
     LOAD = 0b0000011,
     LOAD_FP = 0b0000111,
     CUSTOM_0 = 0b0001011,

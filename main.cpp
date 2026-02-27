@@ -27,8 +27,6 @@ int main(){
     InstructionType instr_type = instruction_group_to_type(instr_group);
     Instruction instruction = get_instruction(instr_type, inst);
 
-    cout << instruction;
-
     return 0;
 }
 
