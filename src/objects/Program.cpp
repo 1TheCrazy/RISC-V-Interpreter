@@ -16,5 +16,12 @@ void Program::init(const ELF& elf, const std::vector<uint8_t>& bytes){
 }
 
 void Program::step(){
+    uint32_t instruction = 0;
     
+    for(int i = 0; i < 4; i++){
+        instruction |= uint32_t(RAM[program_counter]) << i * 8;
+        program_counter++;    
+    }
+    
+
 }
