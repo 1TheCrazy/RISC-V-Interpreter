@@ -45,6 +45,39 @@ Instruction Program::get_instruction_from_32(const uint32_t& inst){
 
 void Program::execute_instruction(Instruction instruction, const uint32_t& data){
     switch(instruction){
+        case Instruction::ADD:
+            REG[rd_of(data)] = REG[rs1_of(data)] + REG[rs2_of(data)];
+            break;
+        case Instruction::ADDI:
+            REG[rd_of(data)] = REG[rs1_of(data)] + imm_11_0_of(data);
+            break;
+        case Instruction::SUB:
+            REG[rd_of(data)] = REG[rs1_of(data)] - REG[rs2_of(data)];
+        case Instruction::AND:
+            REG[rd_of(data)] = REG[rs1_of(data)] & REG[rs2_of(data)];
+        case Instruction::ANDI:
+            REG[rd_of(data)] = REG[rs1_of(data)] & imm_11_0_of(data);
+        case Instruction::OR:
+            REG[rd_of(data)] = REG[rs1_of(data)] | REG[rs2_of(data)];
+        case Instruction::ORI:
+            REG[rd_of(data)] = REG[rs1_of(data)] | imm_11_0_of(data);
+        case Instruction::XOR:
+            REG[rd_of(data)] = REG[rs1_of(data)] ^ REG[rs2_of(data)];
+        case Instruction::XORI:
+            REG[rd_of(data)] = REG[rs1_of(data)] ^ imm_11_0_of(data);
+        case Instruction::SLL:
+            REG[rd_of(data)] = REG[rs1_of(data)] << REG[rs2_of(data)];
+        case Instruction::SLLI:
+            REG[rd_of(data)] = REG[rs1_of(data)]  << shamt_of(data); // vielleicht falsch bis komisch??
+        case Instruction::SRL:
+            REG[rd_of(data)] = REG[rs1_of(data)] >> REG[rs2_of(data)];
+        case Instruction::SRLI:
+            REG[rd_of(data)] = REG[rs1_of(data)]  >> shamt_of(data); // vielleicht falsch bis komisch??
         
+        
+        
+        
+        
+
     }
 }
