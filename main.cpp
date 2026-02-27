@@ -9,19 +9,19 @@ using namespace std;
 vector<uint8_t> RAM;
 
 int main(){
-    const auto bytes = read_file_bytes("./hello_world.elf");
+    const auto bytes = read_file_bytes("./hello_world");
     ELF elf = ELF(bytes);
 
     for(int i = 0; i < elf.program_headers.size(); i++){
         auto header = elf.program_headers[i];
 
+        log("---------");
         log("MemSize: " + to_string(header.p_memsz));
         log("VirtualAddr: " + to_string(header.p_vaddr));
-
+        log("FileSize: " + to_string(header.p_filesz));
     }
 
-    log("Found " + to_string(elf.program_headers.size()) + " Headers");
-
+    log(to_string(elf.elf_header.e_phentsize));
     return 0;
 }
 
