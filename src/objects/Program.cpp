@@ -1,7 +1,8 @@
 #include <objects/Program.h>
+#include <objects/Instructions.h>
 #include <vector>
 
-void Program::init(const ELF& elf, const std::vector<uint8_t>& bytes){
+Program::Program(const ELF& elf, const std::vector<uint8_t>& bytes){
     for(int i = 0; i < elf.program_headers.size(); i++){
         auto header = elf.program_headers[i];
         
@@ -23,5 +24,16 @@ void Program::step(){
         program_counter++;    
     }
     
+    Instrcution instr = get_instruction_from_32(instruction);
+    execute_instruction(instr, instruction); 
+}
 
+Instrcution Program::get_instruction_from_32(const uint32_t&){
+    // Find out wtf this is
+}
+
+void Program::execute_instruction(Instrcution instruction, const uint32_t& data){
+    switch(instruction){
+        // Add cases here
+    }
 }

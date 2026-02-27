@@ -15,5 +15,6 @@ class Program{
         Program(const ELF& elf, const std::vector<uint8_t>& bytes);
 
     private:
-        Instrcution get_instruction_from_64(const uint64_t&);
+        Instrcution get_instruction_from_32(const uint32_t& instruction);
+        void execute_instruction(Instrcution instrcution, const uint32_t& data);
 };
