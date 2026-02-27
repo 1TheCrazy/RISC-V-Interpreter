@@ -13,19 +13,19 @@ using namespace std;
 vector<uint8_t> RAM;
 
 int main(){
-    /*
+/*
     const auto bytes = read_file_bytes("./hello_world");
     ELF elf = ELF(bytes);
     Program program = Program(elf, bytes);
 */
-    uint32_t inst = 0b01000000011110111000010100110011;
-    auto opcode = inst & 0b1111111;
-    auto func_3 = (inst >> 11) & 0b111;
-    auto func7 = inst >> 24;
+    uint32_t inst = 0b00000000101000010000000010010011;
+    auto opcode = op_code_of(inst);
 
-    InstructionGroup instr_group = static_cast<InstructionGroup>(opcode);
+    InstructionGroup instr_group = instruction_group_of(opcode);
     InstructionType instr_type = instruction_group_to_type(instr_group);
     Instruction instruction = get_instruction(instr_type, inst);
+
+    std::cout << static_cast<int>(instruction) << std::endl;
 
     return 0;
 }

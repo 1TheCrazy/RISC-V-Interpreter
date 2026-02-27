@@ -19,3 +19,8 @@ uint32_t imm_11_5_4_0_of(const uint32_t& instruction);
 uint32_t imm_11_0_of(const uint32_t& instruction);
 uint32_t imm_12_11_10_5_4_1_of(const uint32_t& instruction);
 uint32_t imm_20_19_12_11_10_1_of(const uint32_t& instruction);
+uint32_t func_3_of(const uint32_t& instruction);
+uint32_t func_7_of(const uint32_t& instruction);
+uint32_t op_code_of(const uint32_t& instruction);
+InstructionGroup instruction_group_of(const uint32_t& instruction);
+uint32_t shamt_of(const uint32_t& instruction);

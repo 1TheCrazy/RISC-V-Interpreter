@@ -46,8 +46,8 @@ Instruction instruction_from_type_B(const uint32_t& instruction){
 }
 
 Instruction instruction_from_type_U(const uint32_t& instruction){
-    auto opcode = instruction & 0b1111111;
-    InstructionGroup instr_group = static_cast<InstructionGroup>(opcode);
+    auto opcode = op_code_of(instruction);
+    InstructionGroup instr_group = instruction_group_of(opcode);
 
     return instr_group == InstructionGroup::LUI ? Instruction::LUI : Instruction::AUIPC;
 }
@@ -72,8 +72,8 @@ Instruction instruction_from_type_I(const uint32_t& instruction){
     auto func_3 = func_3_of(instruction);
     auto imm_11_0 = imm_11_0_of(instruction);
 
-    auto opcode = instruction & 0b1111111;
-    InstructionGroup instr_group = static_cast<InstructionGroup>(opcode);
+    auto opcode = op_code_of(instruction);
+    InstructionGroup instr_group = instruction_group_of(opcode);
 
     switch(instr_group){
         case InstructionGroup::LOAD :
@@ -109,7 +109,6 @@ Instruction instruction_from_type_I(const uint32_t& instruction){
                     return Instruction::ANDI;
                 // No Immediate - shamt
                 default:
-                    auto shamt = (instruction >> 19) & 0b11111;
                     auto id = instruction >> 24;
 
                     switch(func_3){
@@ -258,4 +257,18 @@ uint32_t func_3_of(const uint32_t& instruction){
 uint32_t func_7_of(const uint32_t& instruction){
     uint32_t func_7 = instruction >> 24;
     return func_7;
+}
+
+uint32_t op_code_of(const uint32_t& instruction){
+    uint32_t opcode = instruction & 0b1111111;
+    return opcode;
+}
+
+InstructionGroup instruction_group_of(const uint32_t& opcode){
+    return static_cast<InstructionGroup>(opcode);
+}
+
+uint32_t shamt_of(const uint32_t& instruction) {
+    uint32_t shamt = (instruction >> 19) & 0b11111;
+    return shamt;
 }
