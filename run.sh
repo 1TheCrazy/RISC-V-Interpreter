@@ -3,4 +3,4 @@
 cmake -S . -B build
 cmake --build build
 
-./build/myapp
+./build/riscv-interpreter
