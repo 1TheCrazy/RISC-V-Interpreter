@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <util/InstructionUtil.h>
+#include <util/SignUtil.h>
 
 Program::Program(const ELF& elf, const std::vector<uint8_t>& bytes){
     for(int i = 0; i < elf.program_headers.size(); i++){
@@ -71,7 +72,84 @@ void Program::execute_instruction(Instruction instruction, const uint32_t& data)
             REG[rd_of(data)] = REG[rs1_of(data)] >> REG[rs2_of(data)];
         case Instruction::SRLI:
             REG[rd_of(data)] = REG[rs1_of(data)]  >> shamt_of(data); // vielleicht falsch bis komisch??
-        
+        case Instruction::LB: {
+            int64_t offset = sign_extend<int64_t>(imm_11_0_of(data), 12);
+            uint64_t addr  = REG[rs1_of(data)] + offset;
+            int8_t b = static_cast<int8_t>(RAM[addr]);
+            REG[rd_of(data)] = static_cast<int64_t>(b);
+            break;
+        }
+        case Instruction::LH: {
+            int64_t offset = sign_extend<int64_t>(imm_11_0_of(data), 12);
+            uint64_t addr  = REG[rs1_of(data)] + offset;
+            uint16_t value = RAM[addr] |          // Low bit
+                            (RAM[addr + 1] << 8); // High Bit
+            REG[rd_of(data)] = sign_extend<int64_t>(value, 16);
+            break;
+        }
+        case Instruction::LW: { 
+            int64_t offset = sign_extend<int64_t>(imm_11_0_of(data), 12);
+            uint64_t addr  = REG[rs1_of(data)] + offset;
+            uint16_t value = RAM[addr] |
+                            (RAM[addr + 1] << 8) |
+                            (RAM[addr + 1] << 16) |
+                            (RAM[addr + 1] << 24);
+
+            REG[rd_of(data)] = sign_extend<int64_t>(value, 32);
+            break;
+        }
+        case Instruction::LHU: {
+            int64_t offset = sign_extend<int64_t>(imm_11_0_of(data), 12);
+            uint64_t addr  = REG[rs1_of(data)] + offset;
+            uint16_t value = static_cast<uint16_t>(static_cast<uint8_t>(RAM[addr])) |
+                             (static_cast<uint16_t>(static_cast<uint8_t>(RAM[addr + 1])) << 8);
+            REG[rd_of(data)] = static_cast<uint64_t>(value);
+            break;
+        }
+        case Instruction::LBU: {
+            int64_t offset = sign_extend<int64_t>(imm_11_0_of(data), 12);
+            uint64_t addr  = REG[rs1_of(data)] + offset;
+            uint8_t value = RAM[addr];
+            REG[rd_of(data)] = static_cast<uint64_t>(value);
+            break;
+        }
+        case Instruction::SW: {
+            int64_t  offset = sign_extend<int64_t>(imm_11_5_4_0_of(data), 12);
+            uint64_t addr   = REG[rs1_of(data)] + offset;
+
+            uint32_t value = static_cast<uint32_t>(REG[rs2_of(data)]); // store low 32 bits
+
+            RAM[addr + 0] = static_cast<uint8_t>( value        & 0xFF);
+            RAM[addr + 1] = static_cast<uint8_t>((value >>  8) & 0xFF);
+            RAM[addr + 2] = static_cast<uint8_t>((value >> 16) & 0xFF);
+            RAM[addr + 3] = static_cast<uint8_t>((value >> 24) & 0xFF);
+
+            break;
+        }
+        case Instruction::SH: {
+            int64_t  offset = sign_extend<int64_t>(imm_11_5_4_0_of(data), 12);
+            uint64_t addr   = REG[rs1_of(data)] + offset;
+
+            uint16_t value = static_cast<uint16_t>(REG[rs2_of(data)]);
+
+            RAM[addr + 0] = static_cast<uint8_t>( value        & 0xFF);
+            RAM[addr + 1] = static_cast<uint8_t>((value >>  8) & 0xFF);
+
+            break;
+        }
+        case Instruction::SB: {
+            int64_t  offset = sign_extend<int64_t>(imm_11_5_4_0_of(data), 12);
+            uint64_t addr   = REG[rs1_of(data)] + offset;
+
+            uint8_t value = static_cast<uint8_t>(REG[rs2_of(data)]);
+
+            RAM[addr] = static_cast<uint8_t>(value);            
+            break;
+        }
+            
+            
+            
+
         
         
         
