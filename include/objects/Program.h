@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <objects/ELF.h>
+#include <objects/Instructions.h>
 
 class Program{
     public:
@@ -12,4 +13,7 @@ class Program{
         void step();
         // Setup: load the program into RAM, ...
         Program(const ELF& elf, const std::vector<uint8_t>& bytes);
+
+    private:
+        Instrcution get_instruction_from_64(const uint64_t&);
 };
