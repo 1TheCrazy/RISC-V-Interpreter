@@ -25,7 +25,7 @@ int main(){
 
     InstructionGroup instr_group = static_cast<InstructionGroup>(opcode);
     InstructionType instr_type = instruction_group_to_type(instr_group);
-    Instrcution instruction = get_instruction(instr_type, inst);
+    Instruction instruction = get_instruction(instr_type, inst);
 
     cout << instruction;
 

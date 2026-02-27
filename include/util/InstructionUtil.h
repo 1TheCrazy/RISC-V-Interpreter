@@ -4,6 +4,6 @@
 #include <vector>
 #include <iostream>
 
-Instrcution get_instruction(const InstructionType& instr_type, const uint32_t& instruction);
-Instrcution instruction_from_type_R(const uint32_t& instruction);
+Instruction get_instruction(const InstructionType& instr_type, const uint32_t& instruction);
+Instruction instruction_from_type_R(const uint32_t& instruction);
 InstructionType instruction_group_to_type(const InstructionGroup& instr);

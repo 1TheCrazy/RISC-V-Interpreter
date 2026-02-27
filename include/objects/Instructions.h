@@ -1,6 +1,6 @@
 #pragma once
 
-enum Instrcution{
+enum Instruction{
     ADD,
     SUB,
     SLL,

@@ -1,13 +1,13 @@
 #include <util/InstructionUtil.h>
 
-Instrcution get_instruction(const InstructionType& instr_type, const uint32_t& instruction){
+Instruction get_instruction(const InstructionType& instr_type, const uint32_t& instruction){
     switch(instr_type){
         case InstructionType::R : 
             return instruction_from_type_R(instruction);
     }
 }
 
-Instrcution instruction_from_type_R(const uint32_t& instruction){
+Instruction instruction_from_type_R(const uint32_t& instruction){
     auto func_3 = (instruction >> 11) & 0b111;
     auto func_7 = instruction >> 24;
     auto rs1 = (instruction >> 14) & 0b11111;
@@ -16,21 +16,21 @@ Instrcution instruction_from_type_R(const uint32_t& instruction){
 
     switch(func_3){
         case 0b000 :
-            return func_7 == 0b0000000 ? Instrcution::ADD : Instrcution::SUB;
+            return func_7 == 0b0000000 ? Instruction::ADD : Instruction::SUB;
         case 0b001 :
-            return Instrcution::SLL;
+            return Instruction::SLL;
         case 0b010 :
-            return Instrcution::SLT;
+            return Instruction::SLT;
         case 0b011 :
-            return Instrcution::SLTU;
+            return Instruction::SLTU;
         case 0b100: 
-            return Instrcution::XOR;
+            return Instruction::XOR;
         case 0b101 :
-            return func_7 == 0b0000000 ? Instrcution::SRL : Instrcution::SRA;
+            return func_7 == 0b0000000 ? Instruction::SRL : Instruction::SRA;
         case 0b110 : 
-            return Instrcution::OR;
+            return Instruction::OR;
         case 0b111 :
-            return Instrcution::AND;
+            return Instruction::AND;
     }
 }
 

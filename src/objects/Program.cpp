@@ -27,23 +27,23 @@ void Program::step(){
         program_counter++;    
     }
     
-    Instrcution instr = get_instruction_from_32(instruction);
+    Instruction instr = get_instruction_from_32(instruction);
     execute_instruction(instr, instruction); 
 }
 
-Instrcution Program::get_instruction_from_32(const uint32_t& inst){
+Instruction Program::get_instruction_from_32(const uint32_t& inst){
     auto opcode = inst & 0b1111111;
     auto func_3 = (inst >> 11) & 0b111;
     auto func7 = inst >> 24;
 
     InstructionGroup instr_group = static_cast<InstructionGroup>(opcode);
     InstructionType instr_type = instruction_group_to_type(instr_group);
-    Instrcution instruction = get_instruction(instr_type, inst);
+    Instruction instruction = get_instruction(instr_type, inst);
 
     // Process that instruction here
 }
 
-void Program::execute_instruction(Instrcution instruction, const uint32_t& data){
+void Program::execute_instruction(Instruction instruction, const uint32_t& data){
     switch(instruction){
         // Add cases here
     }
