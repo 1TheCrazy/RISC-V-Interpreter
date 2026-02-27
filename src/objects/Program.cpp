@@ -45,33 +45,64 @@ Instruction Program::get_instruction_from_32(const uint32_t& inst){
 void Program::execute_instruction(Instruction instruction, const uint32_t& data){
     switch(instruction){
         case Instruction::ADD:
-            REG[rd_of(data)] = REG[rs1_of(data)] + REG[rs2_of(data)];
-            break;
+        REG[rd_of(data)] = REG[rs1_of(data)] + REG[rs2_of(data)];
+        break;
+
         case Instruction::ADDI:
-            REG[rd_of(data)] = REG[rs1_of(data)] + imm_11_0_of(data);
+            REG[rd_of(data)] = REG[rs1_of(data)] + sign_extend<int64_t>(imm_11_0_of(data), 12);
             break;
+
         case Instruction::SUB:
             REG[rd_of(data)] = REG[rs1_of(data)] - REG[rs2_of(data)];
+            break;
+
         case Instruction::AND:
             REG[rd_of(data)] = REG[rs1_of(data)] & REG[rs2_of(data)];
+            break;
+
         case Instruction::ANDI:
-            REG[rd_of(data)] = REG[rs1_of(data)] & imm_11_0_of(data);
+            REG[rd_of(data)] = REG[rs1_of(data)] & static_cast<uint64_t>(sign_extend<int64_t>(imm_11_0_of(data), 12));
+            break;
+
         case Instruction::OR:
             REG[rd_of(data)] = REG[rs1_of(data)] | REG[rs2_of(data)];
+            break;
+
         case Instruction::ORI:
-            REG[rd_of(data)] = REG[rs1_of(data)] | imm_11_0_of(data);
+            REG[rd_of(data)] = REG[rs1_of(data)] | static_cast<uint64_t>(sign_extend<int64_t>(imm_11_0_of(data), 12));
+            break;
+
         case Instruction::XOR:
             REG[rd_of(data)] = REG[rs1_of(data)] ^ REG[rs2_of(data)];
+            break;
+
         case Instruction::XORI:
-            REG[rd_of(data)] = REG[rs1_of(data)] ^ imm_11_0_of(data);
-        case Instruction::SLL:
-            REG[rd_of(data)] = REG[rs1_of(data)] << REG[rs2_of(data)];
-        case Instruction::SLLI:
-            REG[rd_of(data)] = REG[rs1_of(data)]  << shamt_of(data); // vielleicht falsch bis komisch??
-        case Instruction::SRL:
-            REG[rd_of(data)] = REG[rs1_of(data)] >> REG[rs2_of(data)];
-        case Instruction::SRLI:
-            REG[rd_of(data)] = REG[rs1_of(data)]  >> shamt_of(data); // vielleicht falsch bis komisch??
+            REG[rd_of(data)] = REG[rs1_of(data)] ^ static_cast<uint64_t>(sign_extend<int64_t>(imm_11_0_of(data), 12));
+            break;
+
+        case Instruction::SLL: {
+            uint64_t shamt = REG[rs2_of(data)] & 0x3F;      // RV64 mask
+            REG[rd_of(data)] = REG[rs1_of(data)] << shamt;
+            break;
+        }
+
+        case Instruction::SLLI: {
+            uint64_t shamt = shamt_of(data) & 0x3F;         // RV64 mask
+            REG[rd_of(data)] = REG[rs1_of(data)] << shamt;
+            break;
+        }
+
+        case Instruction::SRL: {
+            uint64_t shamt = REG[rs2_of(data)] & 0x3F;      // RV64 mask
+            REG[rd_of(data)] = REG[rs1_of(data)] >> shamt;
+            break;
+        }
+
+        case Instruction::SRLI: {
+            uint64_t shamt = shamt_of(data) & 0x3F;         // RV64 mask
+            REG[rd_of(data)] = REG[rs1_of(data)] >> shamt;
+            break;
+        }
         case Instruction::LB: {
             int64_t offset = sign_extend<int64_t>(imm_11_0_of(data), 12);
             uint64_t addr  = REG[rs1_of(data)] + offset;
