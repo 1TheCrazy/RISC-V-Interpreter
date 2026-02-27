@@ -11,7 +11,7 @@ ELF::ELF(const std::vector<uint8_t>& bytes)
 void ELF::set_program_headers(const std::vector<uint8_t>& bytes){
     for(int i = 0; i < elf_header.e_phenum; i++){
         ProgramHeader p;
-        p.fill(bytes,elf_header.e_phoff+(i+1)*elf_header.e_phentsize);
+        p.fill(bytes,elf_header.e_phoff+ i * elf_header.e_phentsize);
         program_headers.push_back(p);
     }
 }      
