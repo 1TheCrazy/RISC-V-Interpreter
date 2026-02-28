@@ -4,9 +4,13 @@
 #include <vector>
 #include <iostream>
 #include <util/InstructionUtil.h>
+#include <util/LogUtil.h>
 #include <util/SignUtil.h>
 
 Program::Program(const ELF& elf, const std::vector<uint8_t>& bytes){
+    for (int i = 0; i < 33; i++)
+        REG[i] = 0;
+        
     for(int i = 0; i < elf.program_headers.size(); i++){
         auto header = elf.program_headers[i];
         
@@ -32,6 +36,7 @@ void Program::step(){
     REG[0] = 0x0;
 
     uint32_t instruction = 0;
+    const uint64_t instruction_pc = program_counter;
     
     for(int i = 0; i < 4; i++){
         instruction |= uint32_t(RAM[program_counter]) << i * 8;
@@ -41,13 +46,7 @@ void Program::step(){
     
 
     Instruction instr = get_instruction_from_32(instruction);
-    cout << int(instr) <<'\n';
-    for(int i=0; i<33; i++){
-        if(REG[i] != 0){
-            std::string s = fmt::format("{:x}", i); // s == 2a
-            cout << s;
-        }
-    }
+    log_debug_instruction_state(instr, instruction, instruction_pc, REG);
 
     execute_instruction(instr, instruction); 
 }
@@ -319,6 +318,7 @@ void Program::process_syscall(){
 }
 
 void Program::start(){
+
     while(running){
         step();
     }
