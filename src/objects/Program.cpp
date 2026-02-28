@@ -20,7 +20,8 @@ Program::Program(const ELF& elf, const std::vector<uint8_t>& bytes){
     program_counter = elf.elf_header.e_entry;
 
     // Set Stack Pointer
-    REG[2] = elf.elf_header.programm_start;
+    //REG[2] = elf.elf_header.programm_start;
+    REG[2] = 0xf000;
     
     // Run the program on start
     running = true;
@@ -37,7 +38,17 @@ void Program::step(){
         program_counter++;    
     }
     
+    
+
     Instruction instr = get_instruction_from_32(instruction);
+    cout << int(instr) <<'\n';
+    for(int i=0; i<33; i++){
+        if(REG[i] != 0){
+            std::string s = fmt::format("{:x}", i); // s == 2a
+            cout << s;
+        }
+    }
+
     execute_instruction(instr, instruction); 
 }
 

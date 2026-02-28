@@ -7,7 +7,7 @@
 class Program{
     public:
         // Fixed size array for now
-        uint8_t RAM[200000];
+        uint8_t RAM[2000000];
         uint64_t REG[33];
         uint64_t program_counter;
 
