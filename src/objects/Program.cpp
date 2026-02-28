@@ -28,10 +28,6 @@ Program::Program(const ELF& elf, const std::vector<uint8_t>& bytes){
     // Set Stack Pointer
     // REG[2] = elf.elf_header.programm_start;
     REG[2] = 0xf000;
-
-    // Run the program on start
-    running = true;
-    wrote_fallback_message = false;
 }
 
 void Program::step(){
@@ -470,6 +466,9 @@ void Program::process_syscall(){
 }
 
 void Program::start(){
+    // Run the program on start
+    running = true;
+
     while(running){
         step();
     }
