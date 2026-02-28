@@ -8,12 +8,10 @@
 #include <util/SignUtil.h>
 
 Program::Program(const ELF& elf, const std::vector<uint8_t>& bytes){
-    for (int i = 0; i < 33; i++) {
+    for (int i = 0; i < 33; i++)
         REG[i] = 0;
-    }
-    for (int i = 0; i < 2000000; i++) {
+    for (int i = 0; i < 2000000; i++)
         RAM[i] = 0;
-    }
 
     for(int i = 0; i < elf.program_headers.size(); i++){
         auto header = elf.program_headers[i];
@@ -461,8 +459,11 @@ void Program::process_syscall(){
                 written++;
             }
         }
+
+        // save out
         REG[10] = written;
     }
+    // exit
     else if(syscall == 93 || syscall == 94){
         running = false;
     }
