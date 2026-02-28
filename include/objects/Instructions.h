@@ -12,10 +12,17 @@ enum class Instruction{
     SRA,
     OR,
     AND,
+    ADDW,
+    SUBW,
+    SLLW,
+    SRLW,
+    SRAW,
     // Load Group - Type I
     LB,
     LH,
     LW,
+    LD,
+    LWU,
     LBU,
     LHU,
     // OP_IMM - Type I
@@ -28,6 +35,11 @@ enum class Instruction{
     SLLI,
     SRLI,
     SRAI,
+    ADDIW,
+    SLLIW,
+    SRLIW,
+    SRAIW,
+    FENCE,
     // SYSTEM - Type I
     ECALL,
     EBREAK,
@@ -37,6 +49,7 @@ enum class Instruction{
     SB,
     SH,
     SW,
+    SD,
     // AUIPC - Type U
     AUIPC,
     // LUI - Type U
