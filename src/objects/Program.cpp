@@ -177,6 +177,79 @@ void Program::execute_instruction(Instruction instruction, const uint32_t& data)
             RAM[addr] = static_cast<uint8_t>(value);            
             break;
         }
+        case Instruction::SRA:
+            REG[rd_of(data)] = REG[rs1_of(data)] >> REG[rs2_of(data)];
+            break;
+        case Instruction::SRAI:   
+            REG[rd_of(data)] = REG[rs1_of(data)]  >> shamt_of(data); // vielleicht falsch bis komisch??
+            break;
+        case Instruction::SLT:
+            REG[rd_of(data)] = int32_t(REG[rs1_of(data)] < REG[rs2_of(data)]);
+            break;
+        case Instruction::SLTI:
+            REG[rd_of(data)] = int32_t(REG[rs1_of(data)] < imm_11_0_of(data));
+            break;
+        case Instruction::SLTU: {
+            uint32_t rs1 = rs1_of(data);
+            uint32_t rs2 = rs2_of(data);
+            REG[rd_of(data)] = int32_t(REG[rs1] < REG[rs2]);
+            break;
+        }
+        case Instruction::SLTIU: {
+            uint32_t rs1 = rs1_of(data);
+            uint32_t imm = imm_11_0_of(data);
+            REG[rd_of(data)] = int32_t(REG[rs1] < imm);
+            break;
+        }
+        case Instruction::LUI:
+            REG[rd_of(data)] = int32_t(imm_31_12_of(data) << 12);
+            break;
+        case Instruction::AUIPC:
+            REG[rd_of(data)] = program_counter+(imm_31_12_of(data) << 12); //wen was komisch, hier prüfen
+            break;
+        case Instruction::JAL:{
+            REG[rd_of(data)] = program_counter+4;
+            program_counter = program_counter + imm_20_19_12_11_10_1_of(data);
+            break;
+        }
+        case Instruction::JALR:
+            REG[rd_of(data)] = program_counter+4;
+            program_counter = rs1_of(data)+imm_11_0_of(data);
+            break;
+        case Instruction::BEQ:
+            if(rs1_of(data) == rs2_of(data)){
+                program_counter += imm_12_11_10_5_4_1_of(data);
+            }
+            break;
+        case Instruction::BNE:
+            if(rs1_of(data) != rs2_of(data)){
+                program_counter += imm_12_11_10_5_4_1_of(data);
+            }
+            break;
+        case Instruction::BLT:
+            if(rs1_of(data) < rs2_of(data)){
+                program_counter += imm_12_11_10_5_4_1_of(data);
+            }
+            break;
+        case Instruction::BGE:
+            if(rs1_of(data) >= rs2_of(data)){
+                program_counter += imm_12_11_10_5_4_1_of(data);
+            }
+            break;
+        case Instruction::BLTU:
+            if(uint32_t(rs1_of(data)) < uint32_t(rs2_of(data))){
+                program_counter += imm_12_11_10_5_4_1_of(data);
+            }
+            break;
+        case Instruction::BGEU:
+            if(uint32_t(rs1_of(data)) >= uint32_t(rs2_of(data))){
+                program_counter += imm_12_11_10_5_4_1_of(data);
+            }
+            break;
+        
+
+
+        
             
             
             
