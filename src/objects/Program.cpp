@@ -49,7 +49,7 @@ void Program::step(){
     }
 
     Instruction instr = get_instruction_from_32(instruction);
-    log_debug_instruction_state(instr, instruction, instruction_pc, REG);
+    //log_debug_instruction_state(instr, instruction, instruction_pc, REG);
 
     execute_instruction(instr, instruction);
 }
@@ -431,7 +431,7 @@ void Program::process_syscall(){
 
             for(uint64_t k = 0; k < string_len; k++){
                 char c = static_cast<char>(RAM[string_pointer + k]);
-                std::cout << "IMPORTANT!!" << c;
+                std::cout << c;
             }
         }
 
@@ -457,25 +457,13 @@ void Program::process_syscall(){
                     wrote_any = true;
                 }
                 std::cout << c;
-                written++;
-            }
 
-            // Minimal fallback for this reduced emulator when write() points to unmapped memory.
-            if (!wrote_any && !wrote_fallback_message) {
-                std::cout << "Hello World 42";
-                wrote_fallback_message = true;
+                written++;
             }
         }
         REG[10] = written;
     }
-    else if(){
-        
-    }
     else if(syscall == 93 || syscall == 94){
-        if (!wrote_fallback_message) {
-            std::cout << "Hello World 42";
-            wrote_fallback_message = true;
-        }
         running = false;
     }
 }

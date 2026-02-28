@@ -14,12 +14,7 @@ using namespace std;
 vector<uint8_t> RAM;
 
 int main(){
-    std::string elf_path = "./hello_world";
-    if (!std::filesystem::exists(elf_path)) {
-        elf_path = "../hello_world";
-    }
-
-    const auto bytes = read_file_bytes(elf_path);
+    const auto bytes = read_file_bytes("./riscsl");
     ELF elf = ELF(bytes);
     Program program = Program(elf, bytes);
     program.start();
