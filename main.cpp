@@ -14,7 +14,7 @@ using namespace std;
 vector<uint8_t> RAM;
 
 int main(){
-    const auto bytes = read_file_bytes("./riscsl");
+    const auto bytes = read_file_bytes("./hello_world");
 
     ELF elf = ELF(bytes);
     Program program = Program(elf, bytes);
