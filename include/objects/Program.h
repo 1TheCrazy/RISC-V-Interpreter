@@ -15,8 +15,11 @@ class Program{
         void step();
         // Setup: load the program into RAM, ...
         Program(const ELF& elf, const std::vector<uint8_t>& bytes);
+        void start();
 
     private:
         Instruction get_instruction_from_32(const uint32_t& instruction);
         void execute_instruction(Instruction Instruction, const uint32_t& data);
+        void process_syscall();
+        bool running;
 };

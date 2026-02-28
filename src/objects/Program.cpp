@@ -18,9 +18,18 @@ Program::Program(const ELF& elf, const std::vector<uint8_t>& bytes){
     }
 
     program_counter = elf.elf_header.e_entry;
+
+    // Set Stack Pointer
+    REG[2] = elf.elf_header.programm_start;
+    
+    // Run the program on start
+    running = true;
 }
 
 void Program::step(){
+    // Follow conventions
+    REG[0] = 0x0;
+
     uint32_t instruction = 0;
     
     for(int i = 0; i < 4; i++){
@@ -177,14 +186,56 @@ void Program::execute_instruction(Instruction instruction, const uint32_t& data)
             RAM[addr] = static_cast<uint8_t>(value);            
             break;
         }
-            
-            
-            
+        case Instruction::ECALL:
+            process_syscall();
+            break;
+    }
+}
 
-        
-        
-        
-        
+void Program::process_syscall(){
+    // Get Syscall number
+    uint64_t syscall = REG[17];
 
+    uint64_t arg1 = REG[10];
+    uint64_t arg2 = REG[11];
+    uint64_t arg3 = REG[12];
+    
+
+    if(syscall == 66){
+        auto place = arg2;
+        int out_len = 0;
+
+        for(int i=0; i <arg3; i++){
+            uint64_t string_pointer = 0;
+            uint64_t string_len = 0;
+
+            for(int j=0;j<8; j++){
+                string_pointer |= RAM[place + i*8*2 + j] << j *8;
+            }
+
+            for(int j=0;j<8; j++){
+                string_len |= RAM[place + 8 + 8*i*2 + j] << j *8;
+            }
+
+            out_len += string_len;
+            
+            for(int k = 0; k< string_len; k++){
+                char c = RAM[string_pointer + k];
+                cout << c;
+            }
+            
+        }
+
+        // Save out 
+        REG[10] = out_len;
+    }
+    else if(syscall == 93 || syscall == 94){
+        running = false;
+    }
+}
+
+void Program::start(){
+    while(running){
+        step();
     }
 }

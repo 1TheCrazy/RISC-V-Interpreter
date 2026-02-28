@@ -13,19 +13,13 @@ using namespace std;
 vector<uint8_t> RAM;
 
 int main(){
-/*
+    std::cout << "Hel2lo" <<'\n'; 
     const auto bytes = read_file_bytes("./hello_world");
     ELF elf = ELF(bytes);
     Program program = Program(elf, bytes);
-*/
-    uint32_t inst = 0b00000000101000010000000010010011;
-    auto opcode = op_code_of(inst);
+    program.start();
 
-    InstructionGroup instr_group = instruction_group_of(opcode);
-    InstructionType instr_type = instruction_group_to_type(instr_group);
-    Instruction instruction = get_instruction(instr_type, inst);
-
-    std::cout << static_cast<int>(instruction) << std::endl;
+    std::cout << "Should be done." << std::endl;
 
     return 0;
 }

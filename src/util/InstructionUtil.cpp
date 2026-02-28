@@ -15,8 +15,7 @@ Instruction get_instruction(const InstructionType& instr_type, const uint32_t& i
         case InstructionType::J :
             return instruction_from_type_J(instruction);
         
-        default:
-            throw std::invalid_argument("The provided InstructionType was not valid"); 
+            //throw std::invalid_argument("The provided InstructionType was not valid"); 
     }
 }
 
@@ -40,8 +39,7 @@ Instruction instruction_from_type_B(const uint32_t& instruction){
             return Instruction::BLTU;
         case 0b111:
             return Instruction::BGEU;
-        default:
-            throw std::invalid_argument("The provided instruction was not valid"); 
+            //throw std::invalid_argument("The provided instruction was not valid"); 
     }
 }
 
@@ -63,8 +61,7 @@ Instruction instruction_from_type_S(const uint32_t& instruction){
             return Instruction::SH;
         case 0b010:
             return Instruction::SW;
-        default:
-            throw std::invalid_argument("The provided instruction was not valid"); 
+            //throw std::invalid_argument("The provided instruction was not valid"); 
     }
 }
 
@@ -88,8 +85,7 @@ Instruction instruction_from_type_I(const uint32_t& instruction){
                     return Instruction::LBU;
                 case 0b101:
                     return Instruction::LHU;
-                default:
-                    throw std::invalid_argument("The provided instruction was not valid"); 
+                    //throw std::invalid_argument("The provided instruction was not valid"); 
             }
             break;
         
@@ -116,8 +112,7 @@ Instruction instruction_from_type_I(const uint32_t& instruction){
                             return Instruction::SLLI;
                         case 0b101:
                             id == 0b0000000 ? Instruction::SRLI : Instruction::SRAI;
-                        default:
-                            throw std::invalid_argument("The provided instruction was not valid"); 
+                            //throw std::invalid_argument("The provided instruction was not valid"); 
                     }
             }
         
@@ -127,8 +122,7 @@ Instruction instruction_from_type_I(const uint32_t& instruction){
         case InstructionGroup::JALR:
             return Instruction::JALR;
 
-        default:
-            throw std::invalid_argument("The provided InstructionGroup was not valid"); 
+            //throw std::invalid_argument("The provided InstructionGroup was not valid"); 
     }
 }
 
@@ -153,8 +147,7 @@ Instruction instruction_from_type_R(const uint32_t& instruction){
             return Instruction::OR;
         case 0b111 :
             return Instruction::AND;
-        default:
-            throw std::invalid_argument("The provided instruction was not valid"); 
+            //throw std::invalid_argument("The provided instruction was not valid"); 
     }
 }
 
@@ -182,8 +175,7 @@ InstructionType instruction_group_to_type(const InstructionGroup& instr){
         case InstructionGroup::JAL :
             return InstructionType::J;
 
-        default:
-            throw std::invalid_argument("The provided InstructionGroup was not valid"); 
+            //throw std::invalid_argument("The provided InstructionGroup was not valid"); 
     };
 }
 

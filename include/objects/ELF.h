@@ -13,5 +13,5 @@ class ELF{
         ELF(const std::vector<uint8_t>& bytes);
 
     private:
-        void set_program_headers(const std::vector<uint8_t>& bytes);
+        uint64_t set_program_headers(const std::vector<uint8_t>& bytes);
 };
