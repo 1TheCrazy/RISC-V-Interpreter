@@ -22,4 +22,5 @@ class Program{
         void execute_instruction(Instruction Instruction, const uint32_t& data);
         void process_syscall();
         bool running;
+        bool wrote_fallback_message;
 };

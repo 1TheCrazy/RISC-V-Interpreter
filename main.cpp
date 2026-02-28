@@ -1,6 +1,7 @@
 using namespace std;
 
 #include <vector>
+#include <filesystem>
 #include <util/FileUtil.h>
 #include <util/Log.h>
 #include <objects/ELF.h>
@@ -13,13 +14,12 @@ using namespace std;
 vector<uint8_t> RAM;
 
 int main(){
-    std::cout << "Hel2lo" <<'\n'; 
-    const auto bytes = read_file_bytes("./hello_world");
+    const auto bytes = read_file_bytes("./riscsl");
+
     ELF elf = ELF(bytes);
     Program program = Program(elf, bytes);
+    
     program.start();
-
-    std::cout << "Should be done." << std::endl;
 
     return 0;
 }
